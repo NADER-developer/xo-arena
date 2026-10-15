@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Auto-génération des icônes</title>
+</head>
+<body>
+    <h1>Génération automatique des icônes...</h1>
+    <p>Les icônes seront téléchargées automatiquement. Vérifiez votre dossier de téléchargements.</p>
+    <div id="status"></div>
+    
+    <script>
+        const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+        const status = document.getElementById('status');
+        
+        function createIcon(size) {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#7b2cbf');
+            gradient.addColorStop(1, '#5a189a');
+            
+            // Rounded rectangle background
+            const radius = size * 0.215; // 110/512 ratio
+            ctx.fillStyle = gradient;
+            roundRect(ctx, 0, 0, size, size, radius);
+            ctx.fill();
+            
+            // Grid lines
+            const lineWidth = size * 0.015625; // 8/512
+            const gridStart = size * 0.234375; // 120/512
+            const gridEnd = size * 0.765625; // 392/512
+            const line1 = size * 0.390625; // 200/512
+            const line2 = size * 0.609375; // 312/512
+            
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.lineWidth = lineWidth;
+            ctx.lineCap = 'round';
+            
+            // Vertical lines
+            ctx.beginPath();
+            ctx.moveTo(line1, gridStart);
+            ctx.lineTo(line1, gridEnd);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(line2, gridStart);
+            ctx.lineTo(line2, gridEnd);
+            ctx.stroke();
+            
+            // Horizontal lines
+            ctx.beginPath();
+            ctx.moveTo(gridStart, line1);
+            ctx.lineTo(gridEnd, line1);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(gridStart, line2);
+            ctx.lineTo(gridEnd, line2);
+            ctx.stroke();
+            
+            // X symbol (top-left)
+            const xCenter = size * 0.3125; // 160/512
+            const xSize = size * 0.09765625; // 50/512
+            const xWidth = size * 0.03515625; // 18/512
+            
+            const xGradient = ctx.createLinearGradient(xCenter - xSize, xCenter - xSize, xCenter + xSize, xCenter + xSize);
+            xGradient.addColorStop(0, '#00d9ff');
+            xGradient.addColorStop(1, '#00b8d4');
+            
+            ctx.strokeStyle = xGradient;
+            ctx.lineWidth = xWidth;
+            ctx.lineCap = 'round';
+            
+            ctx.beginPath();
+            ctx.moveTo(xCenter - xSize, xCenter - xSize);
+            ctx.lineTo(xCenter + xSize, xCenter + xSize);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(xCenter + xSize, xCenter - xSize);
+            ctx.lineTo(xCenter - xSize, xCenter + xSize);
+            ctx.stroke();
+            
+            // O symbol (bottom-right)
+            const oCenter = size * 0.6875; // 352/512
+            const oRadius = size * 0.0546875; // 28/512
+            const oWidth = size * 0.03125; // 16/512
+            
+            const oGradient = ctx.createLinearGradient(oCenter - oRadius, oCenter - oRadius, oCenter + oRadius, oCenter + oRadius);
+            oGradient.addColorStop(0, '#ff006e');
+            oGradient.addColorStop(1, '#d90059');
+            
+            ctx.strokeStyle = oGradient;
+            ctx.lineWidth = oWidth;
+            ctx.beginPath();
+            ctx.arc(oCenter, oCenter, oRadius, 0, Math.PI * 2);
+            ctx.stroke();
+            
+            // Text "XO"
+            const fontSize = size * 0.09375; // 48/512
+            ctx.font = `bold ${fontSize}px Arial, sans-serif`;
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('XO', size / 2, size * 0.879); // 450/512
+            
+            return canvas;
+        }
+        
+        function roundRect(ctx, x, y, width, height, radius) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+        }
+        
+        async function generateAll() {
+            for (const size of sizes) {
+                const canvas = createIcon(size);
+                
+                // Download
+                canvas.toBlob((blob) => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `icon-${size}x${size}.png`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                    status.innerHTML += `<p>✅ icon-${size}x${size}.png téléchargé</p>`;
+                }, 'image/png');
+                
+                // Small delay between downloads
+                await new Promise(resolve => setTimeout(resolve, 300));
+            }
+            
+            status.innerHTML += '<p style="color: #06ffa5; font-weight: bold;">✅ Toutes les icônes ont été générées !</p>';
+        }
+        
+        // Auto-start
+        setTimeout(generateAll, 1000);
+    </script>
+</body>
+</html>

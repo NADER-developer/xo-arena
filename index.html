@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="XO Arena - Jeu de Tic-Tac-Toe moderne avec modes solo et multijoueur">
+    <title>XO Arena - Tic-Tac-Toe</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#7b2cbf">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="XO Arena">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512x512.png">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Page d'accueil -->
+    <section id="home-screen" class="screen active">
+        <div class="container">
+            <div class="logo-container">
+                <h1 class="logo">XO Arena</h1>
+                <p class="tagline">Le Tic-Tac-Toe réinventé</p>
+            </div>
+            
+            <div class="card">
+                <p class="intro-text">
+                    Affrontez un ami ou défiez l'ordinateur dans ce classique revisité.
+                    Alignez trois symboles et remportez la victoire !
+                </p>
+                
+                <div class="button-group">
+                    <button id="play-btn" class="btn btn-primary">
+                        <span class="btn-icon">▶</span>
+                        Jouer maintenant
+                    </button>
+                    <button id="rules-btn" class="btn btn-secondary">
+                        <span class="btn-icon">📖</span>
+                        Règles du jeu
+                    </button>
+                    <button id="stats-btn" class="btn btn-secondary">
+                        <span class="btn-icon">📊</span>
+                        Statistiques
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sélection du mode de jeu -->
+    <section id="mode-screen" class="screen">
+        <div class="container">
+            <h2 class="screen-title">Choisissez votre mode</h2>
+            
+            <div class="mode-selection">
+                <div class="mode-card" id="mode-pvp">
+                    <div class="mode-icon">👥</div>
+                    <h3 class="mode-title">Joueur vs Joueur</h3>
+                    <p class="mode-description">Affrontez un ami sur le même appareil</p>
+                    <button class="btn btn-mode" data-mode="pvp">Sélectionner</button>
+                </div>
+                
+                <div class="mode-card" id="mode-ai">
+                    <div class="mode-icon">🤖</div>
+                    <h3 class="mode-title">Joueur vs Ordinateur</h3>
+                    <p class="mode-description">Défiez l'intelligence artificielle</p>
+                    <button class="btn btn-mode" data-mode="ai">Sélectionner</button>
+                </div>
+            </div>
+            
+            <button id="back-to-home-from-mode" class="btn btn-back">← Retour</button>
+        </div>
+    </section>
+
+    <!-- Écran de jeu -->
+    <section id="game-screen" class="screen">
+        <div class="container">
+            <div class="game-header">
+                <button id="back-to-mode" class="btn btn-small">← Menu</button>
+                <div class="game-info">
+                    <div class="player-indicator">
+                        <span id="current-player-text">Tour de</span>
+                        <span id="current-player-symbol" class="player-symbol">X</span>
+                    </div>
+                </div>
+                <button id="sound-toggle" class="btn btn-small btn-icon-only" title="Activer/Désactiver le son">
+                    <span id="sound-icon">🔊</span>
+                </button>
+            </div>
+
+            <div class="game-board-container">
+                <div id="game-board" class="game-board">
+                    <div class="cell" data-index="0" role="button" aria-label="Case 1"></div>
+                    <div class="cell" data-index="1" role="button" aria-label="Case 2"></div>
+                    <div class="cell" data-index="2" role="button" aria-label="Case 3"></div>
+                    <div class="cell" data-index="3" role="button" aria-label="Case 4"></div>
+                    <div class="cell" data-index="4" role="button" aria-label="Case 5"></div>
+                    <div class="cell" data-index="5" role="button" aria-label="Case 6"></div>
+                    <div class="cell" data-index="6" role="button" aria-label="Case 7"></div>
+                    <div class="cell" data-index="7" role="button" aria-label="Case 8"></div>
+                    <div class="cell" data-index="8" role="button" aria-label="Case 9"></div>
+                </div>
+            </div>
+
+            <div class="score-display">
+                <div class="score-item">
+                    <div class="score-label">Joueur X</div>
+                    <div class="score-value" id="score-x">0</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Match Nuls</div>
+                    <div class="score-value" id="score-draw">0</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label" id="score-o-label">Joueur O</div>
+                    <div class="score-value" id="score-o">0</div>
+                </div>
+            </div>
+
+            <div class="game-controls">
+                <button id="new-game-btn" class="btn btn-primary">Nouvelle partie</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Écran des règles -->
+    <section id="rules-screen" class="screen">
+        <div class="container">
+            <h2 class="screen-title">Règles du jeu</h2>
+            
+            <div class="card rules-card">
+                <h3>Objectif</h3>
+                <p>Aligner trois symboles identiques (X ou O) horizontalement, verticalement ou en diagonale.</p>
+                
+                <h3>Déroulement</h3>
+                <ul>
+                    <li>Le joueur X commence toujours en premier</li>
+                    <li>Les joueurs jouent à tour de rôle</li>
+                    <li>Chaque joueur place son symbole dans une case libre</li>
+                    <li>Le premier qui aligne trois symboles gagne</li>
+                    <li>Si toutes les cases sont remplies sans alignement, c'est un match nul</li>
+                </ul>
+                
+                <h3>Combinaisons gagnantes</h3>
+                <ul>
+                    <li>3 lignes horizontales</li>
+                    <li>3 lignes verticales</li>
+                    <li>2 lignes diagonales</li>
+                </ul>
+                
+                <h3>Modes de jeu</h3>
+                <p><strong>Joueur vs Joueur :</strong> Deux joueurs s'affrontent sur le même appareil</p>
+                <p><strong>Joueur vs Ordinateur :</strong> Affrontez une IA stratégique</p>
+            </div>
+            
+            <button id="back-to-home-from-rules" class="btn btn-back">← Retour</button>
+        </div>
+    </section>
+
+    <!-- Écran des statistiques -->
+    <section id="stats-screen" class="screen">
+        <div class="container">
+            <h2 class="screen-title">Statistiques</h2>
+            
+            <div class="card stats-card">
+                <div class="stat-row">
+                    <span class="stat-label">Victoires Joueur X :</span>
+                    <span class="stat-value" id="stats-x">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label" id="stats-o-label">Victoires Joueur O :</span>
+                    <span class="stat-value" id="stats-o">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Matchs Nuls :</span>
+                    <span class="stat-value" id="stats-draw">0</span>
+                </div>
+                <div class="stat-row stat-total">
+                    <span class="stat-label">Total de parties :</span>
+                    <span class="stat-value" id="stats-total">0</span>
+                </div>
+                
+                <button id="reset-stats-btn" class="btn btn-danger">Réinitialiser les statistiques</button>
+            </div>
+            
+            <button id="back-to-home-from-stats" class="btn btn-back">← Retour</button>
+        </div>
+    </section>
+
+    <!-- Modal de fin de partie -->
+    <div id="game-over-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon" id="modal-icon">🎉</div>
+            <h2 id="modal-title">Victoire !</h2>
+            <p id="modal-message">Le joueur X a gagné !</p>
+            <button id="play-again-btn" class="btn btn-primary">Rejouer</button>
+            <button id="back-to-menu-btn" class="btn btn-secondary">Retour au menu</button>
+        </div>
+    </div>
+
+    <!-- Modal de confirmation -->
+    <div id="confirm-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon">⚠️</div>
+            <h2>Confirmation</h2>
+            <p id="confirm-message">Êtes-vous sûr ?</p>
+            <div class="modal-buttons">
+                <button id="confirm-yes" class="btn btn-danger">Confirmer</button>
+                <button id="confirm-no" class="btn btn-secondary">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

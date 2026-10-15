@@ -1,0 +1,40 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7b2cbf;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#5a189a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="xGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d9ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00b8d4;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="oGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff006e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d90059;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background rounded square -->
+  <rect width="512" height="512" rx="110" fill="url(#bgGradient)"/>
+  
+  <!-- Grid lines -->
+  <line x1="200" y1="120" x2="200" y2="392" stroke="#ffffff" stroke-width="8" stroke-opacity="0.2" stroke-linecap="round"/>
+  <line x1="312" y1="120" x2="312" y2="392" stroke="#ffffff" stroke-width="8" stroke-opacity="0.2" stroke-linecap="round"/>
+  <line x1="120" y1="200" x2="392" y2="200" stroke="#ffffff" stroke-width="8" stroke-opacity="0.2" stroke-linecap="round"/>
+  <line x1="120" y1="312" x2="392" y2="312" stroke="#ffffff" stroke-width="8" stroke-opacity="0.2" stroke-linecap="round"/>
+  
+  <!-- X Symbol (top-left) -->
+  <g transform="translate(160, 160)">
+    <line x1="-25" y1="-25" x2="25" y2="25" stroke="url(#xGradient)" stroke-width="18" stroke-linecap="round"/>
+    <line x1="25" y1="-25" x2="-25" y2="25" stroke="url(#xGradient)" stroke-width="18" stroke-linecap="round"/>
+  </g>
+  
+  <!-- O Symbol (bottom-right) -->
+  <g transform="translate(352, 352)">
+    <circle cx="0" cy="0" r="28" fill="none" stroke="url(#oGradient)" stroke-width="16"/>
+  </g>
+  
+  <!-- Title text -->
+  <text x="256" y="450" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#ffffff" text-anchor="middle" opacity="0.9">XO</text>
+</svg>

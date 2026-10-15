@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XO Arena - Hors Ligne</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .offline-container {
+            text-align: center;
+            max-width: 500px;
+        }
+        
+        .offline-icon {
+            font-size: 120px;
+            margin-bottom: 30px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #00d9ff 0%, #7b2cbf 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        p {
+            font-size: 1.2rem;
+            color: #b8b8d4;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #7b2cbf 0%, #5a189a 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(123, 44, 191, 0.3);
+            display: inline-block;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(123, 44, 191, 0.5);
+        }
+        
+        .offline-info {
+            background: #16213e;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 30px;
+            border: 1px solid rgba(123, 44, 191, 0.3);
+        }
+        
+        .offline-info h2 {
+            color: #00d9ff;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+        
+        .offline-info ul {
+            text-align: left;
+            color: #b8b8d4;
+            line-height: 1.8;
+            padding-left: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .offline-icon {
+                font-size: 80px;
+            }
+            
+            p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon">📡</div>
+        <h1>Vous êtes hors ligne</h1>
+        <p>
+            Il semblerait que vous n'ayez pas de connexion Internet. 
+            XO Arena fonctionne hors ligne, mais cette page n'a pas encore été mise en cache.
+        </p>
+        
+        <button class="btn" onclick="window.location.reload()">
+            🔄 Réessayer
+        </button>
+        
+        <div class="offline-info">
+            <h2>💡 Pour jouer hors ligne :</h2>
+            <ul>
+                <li>Visitez la page d'accueil au moins une fois avec une connexion Internet</li>
+                <li>L'application sera alors disponible hors ligne</li>
+                <li>Vos statistiques sont sauvegardées localement</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        // Vérifier périodiquement si la connexion est rétablie
+        window.addEventListener('online', () => {
+            console.log('Connexion rétablie !');
+            // Rediriger vers la page d'accueil
+            window.location.href = './';
+        });
+        
+        // Afficher un message si la connexion revient
+        if (navigator.onLine) {
+            window.location.href = './';
+        }
+    </script>
+</body>
+</html>

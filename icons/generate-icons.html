@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur d'Icônes PWA - XO Arena</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #0f0f23;
+            color: #ffffff;
+        }
+        h1 {
+            color: #00d9ff;
+        }
+        .instructions {
+            background: #16213e;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid #7b2cbf;
+        }
+        button {
+            background: #7b2cbf;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #5a189a;
+        }
+        #preview {
+            margin: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .icon-preview {
+            text-align: center;
+        }
+        .icon-preview img {
+            border: 2px solid #7b2cbf;
+            border-radius: 10px;
+            background: white;
+        }
+        .icon-preview p {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #b8b8d4;
+        }
+        .success {
+            background: #06ffa5;
+            color: #0f0f23;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎮 Générateur d'Icônes PWA</h1>
+    
+    <div class="instructions">
+        <h2>Instructions :</h2>
+        <ol>
+            <li>Cliquez sur "Générer toutes les icônes"</li>
+            <li>Les icônes apparaîtront ci-dessous</li>
+            <li>Cliquez sur chaque bouton de téléchargement pour sauvegarder l'icône</li>
+            <li>Placez tous les fichiers PNG dans le dossier <code>icons/</code></li>
+        </ol>
+    </div>
+
+    <button onclick="generateAllIcons()">Générer toutes les icônes</button>
+    
+    <div id="status"></div>
+    <div id="preview"></div>
+
+    <script>
+        const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+        
+        async function generateAllIcons() {
+            const preview = document.getElementById('preview');
+            const status = document.getElementById('status');
+            preview.innerHTML = '';
+            status.innerHTML = '<p>Génération en cours...</p>';
+            
+            try {
+                // Charger le SVG
+                const response = await fetch('icon.svg');
+                const svgText = await response.text();
+                
+                // Créer un élément image temporaire
+                const img = new Image();
+                const svgBlob = new Blob([svgText], { type: 'image/svg+xml' });
+                const url = URL.createObjectURL(svgBlob);
+                
+                img.onload = async function() {
+                    for (const size of sizes) {
+                        await generateIcon(img, size, preview);
+                    }
+                    status.innerHTML = '<div class="success">✅ Toutes les icônes ont été générées ! Téléchargez-les ci-dessous.</div>';
+                    URL.revokeObjectURL(url);
+                };
+                
+                img.src = url;
+            } catch (error) {
+                status.innerHTML = '<p style="color: #ff006e;">❌ Erreur : ' + error.message + '</p>';
+            }
+        }
+        
+        function generateIcon(img, size, container) {
+            return new Promise((resolve) => {
+                const canvas = document.createElement('canvas');
+                canvas.width = size;
+                canvas.height = size;
+                const ctx = canvas.getContext('2d');
+                
+                // Dessiner l'image redimensionnée
+                ctx.drawImage(img, 0, 0, size, size);
+                
+                // Créer l'élément de prévisualisation
+                const div = document.createElement('div');
+                div.className = 'icon-preview';
+                
+                const previewImg = document.createElement('img');
+                previewImg.src = canvas.toDataURL('image/png');
+                previewImg.width = Math.min(size, 128);
+                previewImg.height = Math.min(size, 128);
+                
+                const label = document.createElement('p');
+                label.textContent = `${size}x${size}`;
+                
+                const downloadBtn = document.createElement('button');
+                downloadBtn.textContent = `Télécharger ${size}x${size}`;
+                downloadBtn.onclick = () => downloadIcon(canvas, size);
+                
+                div.appendChild(previewImg);
+                div.appendChild(label);
+                div.appendChild(downloadBtn);
+                container.appendChild(div);
+                
+                resolve();
+            });
+        }
+        
+        function downloadIcon(canvas, size) {
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `icon-${size}x${size}.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 'image/png');
+        }
+    </script>
+</body>
+</html>
